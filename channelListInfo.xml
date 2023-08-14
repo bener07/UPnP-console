@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+	<s:Body>
+		
+
+		<u:GetChannelListInfoResponse xmlns:u="urn:schemas-nds-com:service:Channel-List:1">
+			
+
+			<executionStatus>0</executionStatus>
+			
+
+			<channnelListInfo><CLI><channelListId>a2214641</channelListId><hash>28f6be1483e8377f9bb2a482b208d8fe</hash></CLI></channnelListInfo>
+			
+
+		</u:GetChannelListInfoResponse>
+		
+
+	</s:Body>
+	 
+</s:Envelope>

@@ -1,0 +1,1268 @@
+{
+ "commands_input": "UPnP console> ",
+ "files": {
+  "servicesFile": "services.json",
+  "optionsFile": "options.json",
+  "responseFile": "response.xml"
+ },
+ "UPnP_directory": "UPnP/",
+ "baseURL": "http://192.168.0.2:49152",
+ "jsonIndent": 1,
+ "service": "/KeyboardService/control/",
+ "serviceAction": "GetKeyboardInfo",
+ "storedServices": {
+  "urn:nds-com:serviceId:Channel-List": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:ChannelListServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetChannelListInfo",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "channnelListInfo",
+          "direction": "out",
+          "relatedStateVariable": "ChannelListInfo"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetChannelListDetail",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "channelListId",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "channelListDetail",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_ChannelListDetail"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_ChannelListDetail",
+       "dataType": {
+        "@type": "dt:ChannelListDetail",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "ChannelListInfo",
+       "dataType": {
+        "@type": "dt:ChannelListInfo",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Channel-Selection": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:ChannelSelectionServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetSelectedChannel",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "selectedChannel",
+          "direction": "out",
+          "relatedStateVariable": "SelectedChannel"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SetSelectedChannel",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "channelListId",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "locator",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "channelNumber",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "SelectedChannel",
+       "dataType": {
+        "@type": "dt:SelectedChannel",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Configuration": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:ConfigurationServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": {
+      "name": "GetConfigurationInfo",
+      "argumentList": {
+       "argument": [
+        {
+         "name": "uuid",
+         "direction": "in",
+         "relatedStateVariable": "A_ARG_TYPE_uuid"
+        },
+        {
+         "name": "executionStatus",
+         "direction": "out",
+         "retval": null,
+         "relatedStateVariable": "A_ARG_TYPE_int"
+        },
+        {
+         "name": "configurationInfo",
+         "direction": "out",
+         "relatedStateVariable": "A_ARG_TYPE_configurationInfo"
+        }
+       ]
+      }
+     }
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_configurationInfo",
+       "dataType": {
+        "@type": "dt:ConfigurationInfo",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "ConfigurationInfo",
+       "dataType": {
+        "@type": "dt:ConfigurationInfo",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Editorial-Data": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:EditorialDataServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetUpdateInfo",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "updateInfo",
+          "direction": "out",
+          "relatedStateVariable": "UpdateInfo"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetEventInfo",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "locator",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "language",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "timeSlot",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_TimeSlot"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "eventInfo",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_EventInfo"
+         },
+         {
+          "name": "lastUpdate",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetEventInfoFromId",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "eventid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_EventId"
+         },
+         {
+          "name": "language",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "eventInfo",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_EventInfo"
+         },
+         {
+          "name": "lastUpdate",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetAttributeKeys",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "defaultKeys",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_KeySet"
+         },
+         {
+          "name": "extendedKeys",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_KeySet"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetEventAttribute",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "eventid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_EventId"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "attribute",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_Attribute"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_TimeSlot",
+       "dataType": {
+        "@type": "dt:TimeSlot",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_EventInfo",
+       "dataType": {
+        "@type": "dt:EventInfo",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_Attribute",
+       "dataType": {
+        "@type": "dt:Attribute",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_EventId",
+       "dataType": {
+        "@type": "dt:EventId",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvent": "no",
+       "name": "A_ARG_TYPE_KeySet",
+       "dataType": {
+        "@type": "dt:KeySet",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "UpdateInfo",
+       "dataType": {
+        "@type": "dt:UpdateInfo",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Volume": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:VolumeServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetVolumeState",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "volumeState",
+          "direction": "out",
+          "relatedStateVariable": "VolumeState"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SetVolumeLevel",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "level",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SetMute",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "isMuted",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "VolumeState",
+       "dataType": {
+        "@type": "dt:VolumeState",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:STB-State": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:STBStateServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": {
+      "name": "GetStbState",
+      "argumentList": {
+       "argument": [
+        {
+         "name": "uuid",
+         "direction": "in",
+         "relatedStateVariable": "A_ARG_TYPE_uuid"
+        },
+        {
+         "name": "executionStatus",
+         "direction": "out",
+         "retval": null,
+         "relatedStateVariable": "A_ARG_TYPE_int"
+        },
+        {
+         "name": "stbState",
+         "direction": "out",
+         "relatedStateVariable": "StbState"
+        }
+       ]
+      }
+     }
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "StbState",
+       "dataType": {
+        "@type": "dt:StbState",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Registration": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "RegisterSmartPhone",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "pairingData",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "UnregisterSmartPhone",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "IsRegisteredSmartPhone",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "RequestPairing",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Channel": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:ChannelServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetChannelInfo",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "channelInfo",
+          "direction": "out",
+          "relatedStateVariable": "ChannelInfo"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetChannelInfoHash",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "channelInfoHash",
+          "direction": "out",
+          "relatedStateVariable": "ChannelInfoHash"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetChannelDetails",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "locators",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_locators"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "channelDetails",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_ChannelDetail"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_locators",
+       "dataType": {
+        "@type": "dt:locators",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_ChannelDetail",
+       "dataType": {
+        "@type": "dt:ChannelDetail",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "no",
+       "name": "ChannelInfo",
+       "dataType": {
+        "@type": "dt:ChannelInfo",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "ChannelInfoHash",
+       "dataType": "string"
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Command": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:CommandServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetCommandState",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "commandState",
+          "direction": "out",
+          "relatedStateVariable": "commandState"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SendCommand",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "command",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "commandId",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         }
+        ]
+       }
+      },
+      {
+       "name": "PushNotification",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "value",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "profileID",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "serviceID",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "eventID",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "CommandState",
+       "dataType": {
+        "@type": "dt:CommandState",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Remote-Control": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:RemoteControlServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "SendKey",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "key",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SendContinuousGesture",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "continuousGesture",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_ContinuousGesture"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_ContinuousGesture",
+       "dataType": {
+        "@type": "dt:ContinuousGesture",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Keyboard": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:KeyboardServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetKeyboardInfo",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "keyboardInfo",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_keyboardInfo"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetCharacterSet",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "id",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "characterSet",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_CharacterSet"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SendCharacter",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "character",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_keyboardInfo",
+       "dataType": {
+        "@type": "dt:KeyboardInfo",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_CharacterSet",
+       "dataType": {
+        "@type": "dt:CharacterSet",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "KeyboardInfo",
+       "dataType": {
+        "@type": "dt:KeyboardInfo",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  }
+ }
+}
