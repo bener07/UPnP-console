@@ -106,7 +106,7 @@ def commands(command):
         except KeyError:
             print('Option is not available! Use show help for more information')
         except IndexError:
-            print("Missing arguments!")
+            print("Missing arguments! Or Try to set the service with (set service <service name>)")
         return 1
     else:
         return 0
@@ -124,15 +124,19 @@ def loadOptionsFromFile():
 
 def saveOptionstoFile():
     print("Options Saved!")
-    with open(options['UPnP_directory']+options['files']['optionsFile'], "w") as file:
+    with open(options['UPnP_directory']+options['files']['optionsFile'], "w+") as file:
         file.write(json.dumps(options, indent=int(options['jsonIndent'])))
 
 
 
 def loadServicesFromWeb():
+    print("Please make sure the device you want to get the information is: \7"+options['baseURL'])
+    check = input("Are you sure? [y/n]")
+    if check == 'n' or check == 'no' or check == "N":
+        globals()['options']['baseURL'] = input("Input the url of the device (ex.: http://192.168.0.2:49152): ")
     r = requests.get(options['baseURL']+'/stbdevice.xml')
     xmlResponse = xmltodict.parse(r.content)
-    with open(options['UPnP_directory']+options['files']['servicesFile'], 'w') as file:
+    with open(options['UPnP_directory']+options['files']['servicesFile'], 'w+') as file:
         deviceInfo = xmlResponse.get('root').get('device')
         file.write(json.dumps(deviceInfo, indent=int(options['jsonIndent'])))
 
@@ -159,7 +163,7 @@ def loadFile(fileLocation):
     except FileNotFoundError:
         print("File does not exist!")
         raise FileNotFoundError
-
+        return FileNotFoundError
 
 def loadServices():
     try:
@@ -253,7 +257,10 @@ def send_soap_request(service):
 if __name__ == "__main__":
     # load actions from file or web
     globals()['stbdevice'] = loadServices()
-    globals()['services'] = [x['controlURL'] for x in globals()['stbdevice']['serviceList']['service']]
+    if globals()['stbdevice'] is not None:
+        globals()['services'] = [x['controlURL'] for x in globals()['stbdevice']['serviceList']['service']]
+    else:
+        globals()['services'] = []
     print("Full Services loaded, use 'show services' to see them or 'show stbdevice' to get full information.")
     main()
     saveOptionstoFile()
