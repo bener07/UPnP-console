@@ -1,0 +1,14 @@
+{
+ "commands_input": "UPnP console> ",
+ "files": {
+  "servicesFile": "services.json",
+  "optionsFile": "options.json",
+  "responseFile": "response.xml"
+ },
+ "UPnP_directory": "UPnP/",
+ "baseURL": "http://192.168.0.2:49152",
+ "jsonIndent": 1,
+ "service": "",
+ "serviceAction": "",
+ "storedServices": {}
+}
