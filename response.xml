@@ -3,13 +3,13 @@
 	<s:Body>
 		
 
-		<u:SendCharacterResponse xmlns:u="urn:schemas-nds-com:service:Command:1">
+		<u:SendKeyResponse xmlns:u="urn:schemas-nds-com:service:Remote-Control:1">
 			
 
 			<executionStatus>0</executionStatus>
 			
 
-		</u:SendCharacterResponse>
+		</u:SendKeyResponse>
 		
 
 	</s:Body>

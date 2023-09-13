@@ -29,6 +29,7 @@ options = {
     },
     'UPnP_directory': 'UPnP/',
     'baseURL': "http://192.168.0.2:49152",
+    'deviceInfoPage': '/stbdevice.xml',
     'jsonIndent': 1,
     'service': '',
     'serviceAction': '',
@@ -130,11 +131,11 @@ def saveOptionstoFile():
 
 
 def loadServicesFromWeb():
-    print("Please make sure the device you want to get the information is: \7"+options['baseURL'])
+    print("Please make sure the device you want to get the information from is: \7"+options['baseURL']+options['deviceInfoPage'])
     check = input("Are you sure? [y/n]")
     if check == 'n' or check == 'no' or check == "N":
         globals()['options']['baseURL'] = input("Input the url of the device (ex.: http://192.168.0.2:49152): ")
-    r = requests.get(options['baseURL']+'/stbdevice.xml')
+    r = requests.get(options['baseURL']+options['deviceInfoPage'])
     xmlResponse = xmltodict.parse(r.content)
     with open(options['UPnP_directory']+options['files']['servicesFile'], 'w+') as file:
         deviceInfo = xmlResponse.get('root').get('device')
@@ -180,7 +181,8 @@ def getFullServiceInformation():
         return options['storedServices'][service['serviceId']]
     else:
         print("Using web")
-        r = requests.get(options['baseURL']+service['SCPDURL'])
+        url = options['baseURL']+service['SCPDURL']
+        r = requests.get(url)
         response = xmltodict.parse(r.content)
         options['storedServices'][service['serviceId']] = response
         return response

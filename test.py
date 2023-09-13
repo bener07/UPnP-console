@@ -1,24 +1,21 @@
 #!/bin/python3
-import socket
-import sys
-dst = "192.168.0.0"
-if len(sys.argv) > 1:
-    dst = sys.argv[1]
-st = "upnp:rootdevice"
-if len(sys.argv) > 2:
-    st = sys.argv[2]
-msg = [
-    'NOTIFY * HTTP/1.1',
-    'Host: 239.255.255.255:1900',
-    'NT:'+st,
-    'Man:"ssdp:discover"',
-    'MX:20',
-    '']
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
-s.sendto('\r\n'.join(msg).encode()+b'\r\n', (dst, 37443) )
-try:
-    data, addr = s.recvfrom(32*1024)
-except socket.timeout:
-    print("Timeout")
-    exit()
-print("[+] %s\n%s" % (addr, data.decode()))
+from UPnPDevice import Device, getValue
+import json
+#test()
+#print(test.sendAction(
+#	'/VolumeService/control/',
+#	'GetVolumeState',
+#	{'uuid': '1'}))
+
+#test = Device({"location": "http://192.168.0.2:49152/stbdevice.xml", "device_name": "Box", "baseURL": "http://192.168.0.2:49152"})
+test = Device({"location": "http://192.168.1.254:49154/305a4f2b/gatedesc2a.xml", "device_name": "Sagemcom F@ST 5657", "baseURL": "http://192.168.1.254:49154/305a4f2b/"})
+#test = Device({"location": "http://192.168.1.254:1990/7e20e062-7e5d-4bea-912c-fa7fc418c7c5/WFADevice.xml", "device_name": "Sagemcom F@ST 5657", "baseURL": "http://192.168.1.254:1990"})
+test()
+print(test.loadActions())
+
+
+#print([getValue(x, 'direction') for x in test.getActionArguments('GetKeyboardInfo','/KeyboardService/control/')])
+#print(test.sendAction(
+#	'/upnp/control/Layer3Forwarding1',
+#	'', 
+#	{'NewMessage': 'Hello'}))
