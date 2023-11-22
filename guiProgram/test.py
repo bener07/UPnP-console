@@ -10,10 +10,8 @@ deviceDict = {
       'device_type': 'urn:schemas-upnp-org:device:InternetGatewayDevice:2'
    }
 
-device = Device(
-   deviceDict
-)
-device.loadServices()
-print(device.services.get('/upnp/control/Layer3Forwarding1'))
-#service = Service(deviceDict)
-#print(service.information())
+#device = Device(
+#   deviceDict
+#)
+service = Service(deviceDict)
+print(service.information())

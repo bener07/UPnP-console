@@ -209,7 +209,8 @@ class Service:
 
 
 	def loadActions(self):
-		url = re.sub(r'(?<!http:)/+', '/', url)
+		url = self.baseURL+self.SCPDURL
+		url = self.__filter_url(url)
 		servicePage = requests.get(url)
 		servicePage = xml.parseString(servicePage.text)
 		actions = {}
@@ -217,6 +218,19 @@ class Service:
 			action = xmltodict.parse(action.toprettyxml()).get('action')
 			actions[action.get('name')] = Action(action.get('name'),action.get('argumentList'))
 		return actions
+
+	def __filter_url(url):
+		url = re.sub(r'(?<!http:)/+', '/', url)
+		schema, url = url.split('//')
+		previous = ''
+		for string in url.split('/'):
+			stringLocation = url.find(string)
+			if previous == string:
+				filtered_url = url.split('/')
+				filtered_url.remove(string)
+				url = "/".join(filtered_url)
+			previous = string
+		return "//".join((schema, url))
 
 class Action(Service):
 	def __init__(self, actionName, arguments):
