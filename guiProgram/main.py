@@ -3,7 +3,6 @@ import PySimpleGUI as sg
 from UPnPDevice import Device
 
 import subprocess, os
-import json
 import requests, socket
 from xml.etree import ElementTree
 
@@ -11,6 +10,8 @@ loading = True
 loadedDevices = []
 selectedDevice = None
 device = []
+service = ''
+action = ''
 
 def getDevices(window):
 	ssdp_request = (
@@ -29,11 +30,10 @@ def getDevices(window):
 	count = 0
 	while True:
 		try:
-			count += 1
-			window['message'].update('Loading'+('.'*count))
+			window['message'].update('Loading...')
+			window.refresh()
 			response, addr = ssdp_socket.recvfrom(1024)
 			devices.append(response.decode('utf-8'))
-			window.refresh()
 		except socket.timeout:
 			print("Timed out")
 			break
@@ -43,18 +43,21 @@ def getDevices(window):
 		location = device.split('LOCATION:', 1)[1].split('\r\n', 1)[0].strip()
 		response = requests.get(location)
 		root = ElementTree.ElementTree(ElementTree.fromstring(response.content))
-		yield {
+		device = {
 			"location": location,
-			"baseURL": "/".join(location.split('/')[:-1])+"/",
 			"response": response,
 			"device_name": root.find(".//{urn:schemas-upnp-org:device-1-0}friendlyName").text,
 			"device_type" : root.find(".//{urn:schemas-upnp-org:device-1-0}deviceType").text,
 		}
+		urlBase = root.find('.//{urn:schemas-upnp-org:device-1-0}URLBase').text
+		if urlBase is None:
+			urlBase = "/".join(location.split('/')[:-1])+"/"
+		device['baseURL'] = urlBase
+		yield device
 	window['message'].update('')
 
 def loadingWindow():
 	loadedDevices = globals()['loadedDevices']
-
 
 	loadingLayout = [
 		[
@@ -87,7 +90,6 @@ def loadingWindow():
 		if event=="_LOAD_":
 			loadedDevices = [device for device in getDevices(window)]
 			globals()['loadedDevices'] = loadedDevices
-			print(list(loadedDevices))
 			devicesNames = [device["device_name"] for device in loadedDevices]
 			window['-DEVICE LIST-'].update(devicesNames)
 
@@ -108,24 +110,62 @@ def loadingWindow():
 			else:
 				selected_value = [x for x in loadedDevices if x['device_name'] == selected_value][0]
 				globals()['selectedDevice'] = selected_value
+				globals()['device'] = Device(selected_value)
 				break
 
 		if event=="Quit!" or event==sg.WIN_CLOSED:
 			break
 	window.close()
 
+def convert_dict_to_tree_data(deviceDict, dataTree, parent=''):
+	for key, value in deviceDict.items():
+		if isinstance(deviceDict[key], dict):
+			dataTree.Insert(parent, key, key, value)
+			convert_dict_to_tree_data(deviceDict[key], dataTree, key)
+		else:
+			dataTree.Insert(parent, key, key, value)
+	return dataTree
+
+def loadDeviceTree(device):
+	dataTree = sg.TreeData()
+	if device == []:
+		return dataTree
+	dataTree = convert_dict_to_tree_data(device.toDict(), dataTree)
+	return dataTree
+
+
+def sendEvent(device):
+	service = globals()['service']
+	action = globals()['action']
+	#device = globals()['device']
+	action = device.services.get(service).actions.get(action).send()
+	print(action)
+#	argumentLayout = [
+#		[sg.Text('Arguments')],
+#		[[sg.Text(f'{argument}: {value}'), sg.Input()] for argument, value in action.argument if argument=='name' else [sg.Text('No argument')]],
+#	]
+#	sg.window('Define your Arguments!', resizable=True, layout=argumentLayout)
+#	while True:
+#		if event=='SEND':
+#			# the send returns a string and this is suppose to print it
+#			print(action.send())
+#		if event=='Exit' or event==sg.WIN_CLOSED:
+#			break
+
+
 
 def main():
 	sg.theme('DarkGrey1')
 	selectedDevice = globals()['selectedDevice']
+	deviceTreeData = sg.TreeData()
 
+	# define the menu
 	menu = [
 		['Window', ['New', 'Refresh']],
 		['Device', ['Select', 'Load']],
 	]
 
-	deviceTreeData = sg.TreeData()
-
+	# set the main layout
 	mainWindowlayout = [
 		[
 			sg.Menu(menu),
@@ -133,22 +173,34 @@ def main():
 
 		],
 		[
+			sg.Text(f'Device: {selectedDevice}', key="_DEVICE_", font=('Roboto', 20))
+		],
+		[
 			sg.Tree(key='-Device Tree-',
 				auto_size_columns=True,
 				headings=[],
 				select_mode=sg.TABLE_SELECT_MODE_EXTENDED,
-				data=deviceTreeData,
-				enable_events=True
+				data=loadDeviceTree(globals()['device']),
+				enable_events=True,
+				expand_x=True,
+				expand_y=True,
+				show_expanded=False
 				),
+			#s g.Output(s=(60, 20), key='-OUTPUT-')
 		],
+		[sg.Text("Select a service and an action to then send it", key='message')],
 		[
-			sg.Text(f'Device: {selectedDevice}', key="_DEVICE_", font=('Roboto', 20))
-		]
+			sg.Text("Service: None", key='-SELECTED SERVICE-'),
+			sg.Push(),
+			sg.Button('Send', key='-SEND-')
+		],
+		[sg.Text("Action: None", key='-SELECTED ACTION-')]
 	]
 
-
-	window = sg.Window(title="UPnP console", layout=mainWindowlayout)
+	# initiate the window
+	window = sg.Window(title="UPnP console", layout=mainWindowlayout, resizable=True)
 	counter = 0 	# to force some options to be executed just once
+	# start the window loop
 	while True:
 		selected_device = globals()['selectedDevice']
 		event, values = window.read(timeout=100)
@@ -156,27 +208,55 @@ def main():
 			loadingWindow()
 			window['_DEVICE_'].update('Device: '+ globals()['selectedDevice']['device_name'])
 
+		# in case the device selected and it's not necessary to load it again
 		if selected_device is not None and counter != 1:
-			globals()['device'] = Device(selected_device)
-			print("Hello world")
-			for service in globals()['device'].services:
-				print(service)
-				deviceTreeData.Insert(service)
-			window['-Device Tree-'].update(deviceTreeData)
+			deviceTree = loadDeviceTree(globals()['device'])
+			window['-Device Tree-'].update(deviceTree)
 			window.refresh()
 			counter += 1
 
+		# shows the loading window in case the user wants to set a new device
 		if event=='Load':
 			counter = 0
-			print(globals()['device'])
+			loadingWindow()
+			window['_DEVICE_'].update('Device: '+ globals()['selectedDevice']['device_name'])
 
+		# in case the user wants a new window it creates a new process for it
 		if event=='New':
 			file_location = os.path.abspath(__file__)
 			subprocess.Popen([file_location])
 
+		if event=='-Device Tree-':
+			selected_value = values['-Device Tree-'][0] if values['-Device Tree-'] else None
+			#window['-OUTPUT-'].update('')
+			try:
+				selected_value = window.Element('-Device Tree-').TreeData.tree_dict[selected_value]
+			except:
+				selected_value = window.Element('-Device Tree-').TreeData.tree_dict[0]
+
+			if selected_value.parent == 'services':
+				globals()['service'] = selected_value.key
+				window.Element('-SELECTED SERVICE-').update('Service: '+globals()['service'])
+
+			elif selected_value.parent=='actions':
+				globals()['action'] = selected_value.key
+				window.Element('-SELECTED ACTION-').update('Action: '+globals()['action'])
+			else:
+				window.Element('-SELECTED ACTION-').update('Action: '+globals()['action'])
+				window.Element('-SELECTED SERVICE-').update('Service: '+globals()['service'])
+		
+		if event=='-SEND-':
+			service = globals()['service']
+			action = globals()['action']
+			if service != '' and action != '':
+				sendEvent(Device(selected_device))
+				#print(globals()['device'])
+			else:
+				window.Element('message').update('Please select a service and action to send it!')
+
 		if event=='Exit' or event==sg.WIN_CLOSED:
 			break
-
+		window.refresh()
 	window.close()
 
 if __name__ == '__main__':

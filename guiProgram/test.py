@@ -1,17 +1,12 @@
 from UPnPDevice import Device
-from UPnPDevice import printj
-from UPnPDevice import Service 
-import xmltodict
-
+import requests
 deviceDict = {
-      'location': 'http://192.168.1.254:49154/42337661/gatedesc2a.xml',
-      'baseURL': 'http://192.168.1.254:49154/42337661/',
-      'device_name': 'Sagemcom F@ST 5657',
-      'device_type': 'urn:schemas-upnp-org:device:InternetGatewayDevice:2'
-   }
+    "location": "http://192.168.1.1:2555/upnp/InternetGatewayDevice:2/desc.xml",
+    "baseURL": "http://192.168.1.1:2555",
+    "device_name": "NOS CPE Device",
+    "device_type": "urn:schemas-upnp-org:device:InternetGatewayDevice:2"
+}
 
-#device = Device(
-#   deviceDict
-#)
-service = Service(deviceDict)
-print(service.information())
+device = Device(deviceDict)
+action = device.services.get('/upnp/InternetGatewayDevice:2/Layer3Forwarding1.ctl').actions.get('GetDefaultConnectionService')
+print(action.args())
