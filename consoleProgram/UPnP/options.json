@@ -1,0 +1,229 @@
+{
+ "commands_input": "UPnP console> ",
+ "files": {
+  "servicesFile": "services.json",
+  "optionsFile": "options.json",
+  "responseFile": "response.xml"
+ },
+ "UPnP_directory": "UPnP/",
+ "baseURL": "http://192.168.0.2:49152",
+ "deviceInfoPage": "49446539/gatedesc2a.xml",
+ "jsonIndent": 1,
+ "service": "/RemoteControlService/control/",
+ "serviceAction": "SendKey",
+ "storedServices": {
+  "urn:nds-com:serviceId:Keyboard": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:KeyboardServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "GetKeyboardInfo",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "keyboardInfo",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_keyboardInfo"
+         }
+        ]
+       }
+      },
+      {
+       "name": "GetCharacterSet",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "id",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_string"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "characterSet",
+          "direction": "out",
+          "relatedStateVariable": "A_ARG_TYPE_CharacterSet"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SendCharacter",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "character",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_string",
+       "dataType": "string"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_keyboardInfo",
+       "dataType": {
+        "@type": "dt:KeyboardInfo",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_CharacterSet",
+       "dataType": {
+        "@type": "dt:CharacterSet",
+        "#text": "string"
+       }
+      },
+      {
+       "@sendEvents": "yes",
+       "name": "KeyboardInfo",
+       "dataType": {
+        "@type": "dt:KeyboardInfo",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  },
+  "urn:nds-com:serviceId:Remote-Control": {
+   "scpd": {
+    "@xmlns": "urn:schemas-upnp-org:service-1-0",
+    "@xmlns:dt": "urn:nds-com:STBUPNP:RemoteControlServiceSchema",
+    "specVersion": {
+     "major": "1",
+     "minor": "0"
+    },
+    "actionList": {
+     "action": [
+      {
+       "name": "SendKey",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "key",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      },
+      {
+       "name": "SendContinuousGesture",
+       "argumentList": {
+        "argument": [
+         {
+          "name": "uuid",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_uuid"
+         },
+         {
+          "name": "continuousGesture",
+          "direction": "in",
+          "relatedStateVariable": "A_ARG_TYPE_ContinuousGesture"
+         },
+         {
+          "name": "executionStatus",
+          "direction": "out",
+          "retval": null,
+          "relatedStateVariable": "A_ARG_TYPE_int"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    "serviceStateTable": {
+     "stateVariable": [
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_uuid",
+       "dataType": "uuid"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_int",
+       "dataType": "int"
+      },
+      {
+       "@sendEvents": "no",
+       "name": "A_ARG_TYPE_ContinuousGesture",
+       "dataType": {
+        "@type": "dt:ContinuousGesture",
+        "#text": "string"
+       }
+      }
+     ]
+    }
+   }
+  }
+ }
+}
