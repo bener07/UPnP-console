@@ -4,6 +4,7 @@ from UPnPDevice import Device
 
 import subprocess, os
 import requests, socket
+from pprint import pprint
 from xml.etree import ElementTree
 
 loading = True
@@ -49,8 +50,9 @@ def getDevices(window):
 			"device_name": root.find(".//{urn:schemas-upnp-org:device-1-0}friendlyName").text,
 			"device_type" : root.find(".//{urn:schemas-upnp-org:device-1-0}deviceType").text,
 		}
-		urlBase = root.find('.//{urn:schemas-upnp-org:device-1-0}URLBase').text
-		if urlBase is None:
+		try:
+			urlBase = root.find('.//{urn:schemas-upnp-org:device-1-0}URLBase').text
+		except:
 			urlBase = "/".join(location.split('/')[:-1])+"/"
 		device['baseURL'] = urlBase
 		yield device
@@ -144,19 +146,21 @@ def sendEvent(device):
 	try:
 		if action is None:
 			action = device.services.get(service).actions.get(action)
-			print(action, service)
+		argLayout = []
+		print(action.argument)
 		if isinstance(action.argument, list):
 			for argument in action.argument:
+				print(argument)
 				direction = argument.get('direction')
 				name = argument.get('name')
-				argLayout = [sg.Text(f'Direction: {direction}\nName: {name}')]
+				argLayout.append([sg.Text(f'Direction: {direction}\nName: {name}')])
 				if argument['direction'] == 'in':
 					argLayout.append(sg.Input(key=name))
+			print(argLayout)
 			argumentLayout.append(argLayout)
 		else:
 			direction = action.argument.get('direction')
 			name = action.argument.get('name')
-			print(direction, name)
 			argLayout = [sg.Text(f'Direction: {direction}\nName: {name}')]
 			if action.argument.get('direction') == 'in':
 				argLayout.append([sg.Text("Value for {}".format(name)), sg.Push(), sg.Input(key=name)])
@@ -189,7 +193,7 @@ def main():
 	# define the menu
 	menu = [
 		['Window', ['New', 'Refresh']],
-		['Device', ['Select', 'Load']],
+		['Device', ['Info','Select', 'Load']],
 	]
 
 	# set the main layout
@@ -211,9 +215,9 @@ def main():
 				enable_events=True,
 				expand_x=True,
 				expand_y=True,
-				show_expanded=False
+				show_expanded=False,
 				),
-			sg.Output(s=(100, 20), key='-OUTPUT-')
+			sg.Output(s=(100, 30), key='-OUTPUT-')
 		],
 		[sg.Text("Select a service and an action to then send it", key='message')],
 		[
@@ -242,6 +246,9 @@ def main():
 			window.refresh()
 			counter += 1
 
+		if event == 'Info':
+			sg.Popup(str(globals()['device']), keep_on_top=True)
+
 		# shows the loading window in case the user wants to set a new device
 		if event=='Load':
 			counter = 0
@@ -255,7 +262,7 @@ def main():
 
 		if event=='-Device Tree-':
 			selected_value = values['-Device Tree-'][0] if values['-Device Tree-'] else None
-			#window['-OUTPUT-'].update('')
+			window['-OUTPUT-'].update('')
 			try:
 				selected_value = window.Element('-Device Tree-').TreeData.tree_dict[selected_value]
 			except:
@@ -271,6 +278,7 @@ def main():
 			else:
 				window.Element('-SELECTED ACTION-').update('Action: '+globals()['action'])
 				window.Element('-SELECTED SERVICE-').update('Service: '+globals()['service'])
+			pprint(selected_value.values)
 		
 		if event=='-SEND-':
 			service = globals()['service']

@@ -1,19 +1,20 @@
 import requests
 
-# Set up headers for the SUBSCRIBE request
+soap_request = '''<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <s:Body>
+        <u:GetWANAccessProvider xmlns:u="urn:schemas-upnp-org:service:WANPPPConnection:1">
+        </u:GetWANAccessProvider>
+    </s:Body>
+</s:Envelope>
+'''
+
 headers = {
-    "HOST": "http://192.168.1.1:2555/",  # Extract the host from the URL
-    "CALLBACK": f"<http://192.168.1.6:8080>",  # Specify your callback URL
-    "NT": "upnp:event",
-    "TIMEOUT": "Second-300"  # Specify the timeout duration
+    "Content-Type": 'text/xml; charset=\"utf-8\"',
+    'SOAPAction': '"urn:schemas-upnp-org:service:WANPPPConnection:1#GetWANAccessProvider"'
 }
 
-# Send the SUBSCRIBE request
-response = requests.subscribe(full_event_sub_url, headers=headers)
+url = 'http://192.168.1.254:49154/upnp/control/WANPPPConnection1'
 
-if response.status_code == 200:
-    print("Successfully subscribed to events.")
-    print(f"Subscription ID: {response.headers.get('SID')}")
-else:
-    print(f"Failed to subscribe to events. Status code: {response.status_code}")
+r = requests.post(url, headers=headers, data=soap_request)
 
+print(r.text)

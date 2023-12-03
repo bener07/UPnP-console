@@ -35,7 +35,12 @@ class Device:
 
 
 	def __str__(self):
-		return f"Name: {self.device_name}\nlocation: {self.location}\nbase url:{self.baseURL}"
+		res_string = ""
+		ignore_vars = ['root', 'response', 'services']
+		for var in vars(self):
+			if var not in ignore_vars:
+				res_string += f"{var}: {getattr(self, var)}\n"
+		return res_string
 
 	def __len__(self):
 		return len(self.services)+len(self.actions)
