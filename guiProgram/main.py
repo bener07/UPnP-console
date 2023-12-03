@@ -137,25 +137,52 @@ def loadDeviceTree(device):
 def sendEvent(device):
 	service = globals()['service']
 	action = globals()['action']
-	#device = globals()['device']
-	action = device.services.get(service).actions.get(action).send()
-	print(action)
-#	argumentLayout = [
-#		[sg.Text('Arguments')],
-#		[[sg.Text(f'{argument}: {value}'), sg.Input()] for argument, value in action.argument if argument=='name' else [sg.Text('No argument')]],
-#	]
-#	sg.window('Define your Arguments!', resizable=True, layout=argumentLayout)
-#	while True:
-#		if event=='SEND':
-#			# the send returns a string and this is suppose to print it
-#			print(action.send())
-#		if event=='Exit' or event==sg.WIN_CLOSED:
-#			break
+	action = device.services.get(service).actions.get(action)
+	argumentLayout = [
+		[sg.Text('Arguments')],
+	]
+	try:
+		if action is None:
+			action = device.services.get(service).actions.get(action)
+			print(action, service)
+		if isinstance(action.argument, list):
+			for argument in action.argument:
+				direction = argument.get('direction')
+				name = argument.get('name')
+				argLayout = [sg.Text(f'Direction: {direction}\nName: {name}')]
+				if argument['direction'] == 'in':
+					argLayout.append(sg.Input(key=name))
+			argumentLayout.append(argLayout)
+		else:
+			direction = action.argument.get('direction')
+			name = action.argument.get('name')
+			print(direction, name)
+			argLayout = [sg.Text(f'Direction: {direction}\nName: {name}')]
+			if action.argument.get('direction') == 'in':
+				argLayout.append([sg.Text("Value for {}".format(name)), sg.Push(), sg.Input(key=name)])
+			argumentLayout.append(argLayout)
+	except Exception as e:
+		print("something went widely wrong, here's the action\n", e)
+	argumentLayout.append([sg.Button('Send!', key='SEND')])
+	argwindow = sg.Window('Define your Arguments!', resizable=True, layout=argumentLayout)
+	while True:
+		event, values = argwindow.read()
+		if event=='SEND':
+			# the send returns a string and this is suppose to print it
+			for name, value in values.items():
+				action.setArg(name, value)
+			print(action.send())
+			break
+		if event=='Exit' or event==sg.WIN_CLOSED:
+			break
+
+	argwindow.close()
+
 
 
 
 def main():
-	sg.theme('DarkGrey1')
+	sg.theme('DarkBlue2')
 	selectedDevice = globals()['selectedDevice']
 	deviceTreeData = sg.TreeData()
 
@@ -186,7 +213,7 @@ def main():
 				expand_y=True,
 				show_expanded=False
 				),
-			#s g.Output(s=(60, 20), key='-OUTPUT-')
+			sg.Output(s=(100, 20), key='-OUTPUT-')
 		],
 		[sg.Text("Select a service and an action to then send it", key='message')],
 		[
